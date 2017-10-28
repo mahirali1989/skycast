@@ -171,6 +171,14 @@ button:not(#back):hover {
 	margin: auto;
 	background: rgb(6, 243, 192);
 }
+.temp {
+	height: 100%;
+	overflow: scroll;
+	width: 100%;
+	text-align: left;
+	margin: auto;
+	background: rgb(6, 243, 192);
+}
 /*
 #logo {
 	-webkit-filter: invert(50%);

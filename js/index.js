@@ -72,13 +72,15 @@ function fToC(fahrenheit) {
 // Weather Reporter
 // =================================================
 
-var histObj;
+
+var historic_temps = [];
 function weatherHistory(latitude, longitude,time){
+
 var apiKey       = '1a899775bc115fcf109ee863eb2c90a4',
 	url          = 'https://api.darksky.net/forecast/',
 	lati         = latitude,
 	longi        = longitude,
-	api_call     = url + apiKey + "/" + lati + "," + longi + ","+time;
+	api_call     = url + apiKey + "/" + lati + "," + longi + ","+time+"?extend=hourly&callback=?";
 
 	// Hold our days of the week for reference later.
 	var days = [
@@ -90,15 +92,35 @@ var apiKey       = '1a899775bc115fcf109ee863eb2c90a4',
 		'Friday',
 		'Saturday'
 	];
-	$.getJSON(api_call, function(forecast) {
+	
+	$.getJSON(api_call, function(weatherforecast) {
 		// Loop thru daily forecasts
-		alert(forecast.daily);
+		// for(var i = 0, l = weatherforecast.daily.data.length; i < l - 1; i++) {
+			
+		// 				var date     = new Date(weatherforecast.daily.data[i].time * 1000),
+		// 						day      = days[date.getDay()],
+		// 						skicons  = weatherforecast.daily.data[i].icon,
+		// 						time     = weatherforecast.daily.data[i].time,
+		// 						humidity = weatherforecast.daily.data[i].humidity,
+		// 						summary  = weatherforecast.daily.data[i].summary,
+		// 						temp    = Math.round(weatherforecast.hourly.data[i].temperature),
+		// 						tempMax = Math.round(weatherforecast.daily.data[i].temperatureMax);
+		// }
+		
+		//histObj = weatherforecast.daily;
+		
+		
+		
+		//console.log(histObj.data[0]['temperatureMax']);
+		processmyJSON(weatherforecast);
+			
 	});
 
 
-	
-	histObj = forecast.daily;
 }
+
+
+
 var jsonobj;
 function weatherReport(latitude, longitude) {
 	// variables config for coordinates, url and api key
@@ -285,7 +307,7 @@ $('#weather').on('click', function(e) {
 		$('.form').fadeOut(100, function() {
 			weatherReport(lat, long);
 
-			$('.screen').append(
+			$('.temp').append(
 				'<button id="chart" onclick="showDiv()"> Chart</button><button id="back">New Forecast</button><h3 class="city">' + 
 				city_name + 
 				'</h3><ul style= "list-style-type:none;float:left"; class="list-reset fadein-stagger" id="forecast"></ul>');
@@ -382,22 +404,54 @@ function showDiv(){
 
 $('#history').on('click', function(e){
 
+	
+	
 var lat       = $('#latitude').val(),
 	long      = $('#longitude').val(),
 	city_name = $('#city-search').val();
 if(lat && long !== '') {
 	e.preventDefault();
 }
+	
+function processmyJSON(weatherforecast){
+	
+		historic_temps.push(weatherforecast.daily.data[0]['temperatureMax']);
+	
+}
+
 var currentTime = Math.round((new Date()).getTime() / 1000);
+// 1 week ago 
 time = currentTime - 604800;
+for (let i = 0 ; i< 7; i++){
+	weatherHistory(lat,long,time);
+	time = time + 88400;
 
-weatherHistory(lat,long,time);
+}
+// plotting the graph 
+console.log(historic_temps);
 
 
-console.log(histObj);
-console.log(long);
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+	// The type of chart we want to create
+	type: 'bar',
+	
+	// The data for our dataset
+	data: {
+		labels: ["Sunday", "Monday","Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+		datasets: [{
+			label: "Max Temp",
+			backgroundColor: 'rgb(255, 99, 132)',
+			borderColor: 'rgb(255, 99, 132)',
+			data:historic_temps,
+		},
+	]
+	},
 
-
-
+	// Configuration options go here
+	options: {
+		responsive: false
+	}
+});
 
 });
