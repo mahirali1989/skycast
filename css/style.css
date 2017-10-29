@@ -302,7 +302,13 @@ button:not(#back):hover {
 
 #myChart{
 	position: absolute;
-    right: 0px;
+    right: 25px;
+	width: 620px;
+	height: 320px;
+    border: 0px solid #73AD21;
+    padding: 10px;
+}
+#myChart1{    
 	width: 620px;
 	height: 320px;
     border: 0px solid #73AD21;

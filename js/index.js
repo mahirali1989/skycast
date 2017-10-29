@@ -76,8 +76,29 @@ function fToC(fahrenheit) {
 var historic_temps = [];
 
 function processmyJSON(weatherforecast){
-	
 		historic_temps.push(weatherforecast.daily.data[0]['temperatureMax']);
+    var ctx = document.getElementById('myChart1').getContext('2d');
+var chart = new Chart(ctx, {
+	// The type of chart we want to create
+	type: 'bar',
+	
+	// The data for our dataset
+	data: {
+		labels: ["Sunday", "Monday","Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+		datasets: [{
+			label: "Max Temp",
+			backgroundColor: 'rgb(255, 99, 132)',
+			borderColor: 'rgb(255, 99, 132)',
+			data:historic_temps,
+		},
+	]
+	},
+
+	// Configuration options go here
+	options: {
+		responsive: false
+	}
+});
 	
 }
 
@@ -243,7 +264,8 @@ function weatherReport(latitude, longitude) {
 		
 			$("#forecast").append(
 			
-				'<li class="shade-'+ skicons +'"><div class="card-container"><div><div class="front card"><div>' +
+				'<canvas id="myChart"></canvas>'+
+                '<li class="shade-'+ skicons +'"><div class="card-container"><div><div class="front card"><div>' +
 					"<div class='graphic'><canvas class=" + skicons + "></canvas></div>" +
 					"<div style='color:blue;'><b>Day</b>: " +day + ","+ date.toLocaleDateString() + "</div>" +
 					"<div><b>Temperature</b>: " + temp + "</div>" +
@@ -251,7 +273,8 @@ function weatherReport(latitude, longitude) {
 					"<div><b>Humidity</b>: " + humidity + "</div>" +
 					'<p class="summary">' + summary + '</p>' +
 					'</div></div><div class="back card">' +
-					'<div class="hourly' + ' ' + day + '"><b>24hr Forecast</b><ul class="list-reset"></ul></div></div></div></div></li>'
+					'<div class="hourly' + ' ' + day + '"><b>24hr Forecast</b><ul class="list-reset"></ul></div></div></div></div></li>' 
+                    
 			);
 			
 
@@ -296,6 +319,9 @@ function weatherReport(latitude, longitude) {
 // Get Weather Button Event
 $('#weather').on('click', function(e) {
 		debugger;
+    
+    x = true;
+    y = false;
 	    var lat       = $('#latitude').val(),
 			long      = $('#longitude').val(),
 			city_name = $('#city-search').val()
@@ -361,7 +387,14 @@ insertGoogleScript();
 
 
 function showDiv(){
-	var ctx = document.getElementById('myChart').getContext('2d');
+    debugger;
+    if(x){
+        var ctx = document.getElementById('myChart').getContext('2d');
+    }
+    else if(y){
+    var ctx = document.getElementById('myChart').getContext('2d');    
+    }
+	
 	console.log(jsonobj);
 	var dayObjects = [];
 	for (var key of jsonobj.data){
@@ -410,8 +443,10 @@ function showDiv(){
 
 
 $('#history').on('click', function(e){
+    debugger;
 
-	
+    x = false;
+    y = true;
 	
 var lat       = $('#latitude').val(),
 	long      = $('#longitude').val(),
@@ -433,27 +468,27 @@ for (let i = 0 ; i< 7; i++){
 console.log(historic_temps);
 
 
-var ctx = document.getElementById('myChart').getContext('2d');
-var chart = new Chart(ctx, {
-	// The type of chart we want to create
-	type: 'bar',
-	
-	// The data for our dataset
-	data: {
-		labels: ["Sunday", "Monday","Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-		datasets: [{
-			label: "Max Temp",
-			backgroundColor: 'rgb(255, 99, 132)',
-			borderColor: 'rgb(255, 99, 132)',
-			data:historic_temps,
-		},
-	]
-	},
-
-	// Configuration options go here
-	options: {
-		responsive: false
-	}
-});
+//var ctx = document.getElementById('myChart1').getContext('2d');
+//var chart = new Chart(ctx, {
+//	// The type of chart we want to create
+//	type: 'bar',
+//	
+//	// The data for our dataset
+//	data: {
+//		labels: ["Sunday", "Monday","Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+//		datasets: [{
+//			label: "Max Temp",
+//			backgroundColor: 'rgb(255, 99, 132)',
+//			borderColor: 'rgb(255, 99, 132)',
+//			data:historic_temps,
+//		},
+//	]
+//	},
+//
+//	// Configuration options go here
+//	options: {
+//		responsive: false
+//	}
+//});
 
 });
