@@ -74,6 +74,13 @@ function fToC(fahrenheit) {
 
 
 var historic_temps = [];
+
+function processmyJSON(weatherforecast){
+	
+		historic_temps.push(weatherforecast.daily.data[0]['temperatureMax']);
+	
+}
+
 function weatherHistory(latitude, longitude,time){
 
 var apiKey       = '1a899775bc115fcf109ee863eb2c90a4',
@@ -413,11 +420,6 @@ if(lat && long !== '') {
 	e.preventDefault();
 }
 	
-function processmyJSON(weatherforecast){
-	
-		historic_temps.push(weatherforecast.daily.data[0]['temperatureMax']);
-	
-}
 
 var currentTime = Math.round((new Date()).getTime() / 1000);
 // 1 week ago 
